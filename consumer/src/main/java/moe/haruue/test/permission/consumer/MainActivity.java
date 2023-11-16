@@ -1,25 +1,29 @@
 package moe.haruue.test.permission.consumer;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final String PACKAGE_NAME_PERMISSION_PROVIDER = "moe.haruue.test.permission.provider";
-    private static final String ACTIVITY_NAME_PROTECTED_ACTIVITY = "moe.haruue.test.permission.provider.ProtectedActivity";
+    private static final String PACKAGE_NAME_PERMISSION_CONSUMER = "moe.haruue.test.permission.consumer";
+    private static final String ACTIVITY_NAME_PROTECTED_ACTIVITY = "moe.haruue.test.permission.consumer.ProtectedActivity";
     private static final String PERMISSION_TEST = "moe.haruue.test.permission.TEST";
     private static final int REQUEST_CODE_START_PROTECTED_ACTIVITY = 0x0;
 
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startProtectedActivity() {
         Intent startIntent = new Intent();
-        startIntent.setComponent(new ComponentName(PACKAGE_NAME_PERMISSION_PROVIDER, ACTIVITY_NAME_PROTECTED_ACTIVITY));
+        startIntent.setComponent(new ComponentName(PACKAGE_NAME_PERMISSION_CONSUMER, ACTIVITY_NAME_PROTECTED_ACTIVITY));
         startActivity(startIntent);
     }
 
@@ -87,12 +91,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private boolean isPackageInstalled(String packageName) {
         PackageManager pm = getPackageManager();
-        boolean result;
+        Log.i(TAG, "PACKAGE = " + packageName);
+        Log.i(TAG, "MANAGER = " + pm);
+        boolean result = false;
         try {
-            PackageInfo pi = pm.getPackageInfo(packageName, 0);
+            PackageInfo pi = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                pi = pm.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0));
+            } else {
+                pi = pm.getPackageInfo(packageName, 0);
+            }
             result = pi != null;
-        } catch (PackageManager.NameNotFoundException e) {
-            result = false;
+            Log.i(TAG, "INFO = " + pi);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return result;
     }

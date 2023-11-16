@@ -14,38 +14,27 @@
  *    limitations under the License.
  */
 
-package moe.haruue.test.permission.provider;
+package moe.haruue.test.permission.consumer;
 
 //import com.google.androidbrowserhelper.demos.customtabsheaders.pack.R;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.browser.customtabs.CustomTabsCallback;
-import androidx.browser.customtabs.CustomTabsClient;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.browser.customtabs.CustomTabsService;
-import androidx.browser.customtabs.CustomTabsServiceConnection;
-import androidx.browser.customtabs.CustomTabsSession;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
 
-import java.util.Arrays;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsSession;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class ProtectedActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
